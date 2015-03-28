@@ -8,7 +8,7 @@
       ct = DP.createTextNode.bind(document);
 
   var r = ce("div"), s = ce('style');
-  r.dataset.passed = r.dataset.failed = 0;
+  r.dataset.passed = 0;
 
   s.innerHTML = '.tdf.fail{'+
       'background-color:#f66;'+
