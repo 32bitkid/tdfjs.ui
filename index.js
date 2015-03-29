@@ -81,18 +81,30 @@
   r.setAttribute('id',id);
   r.setAttribute('class', 'tdf-results');
 
+  var increment = function(name) {
+    var ds = r.dataset;
+    ds[name] = parseInt(ds[name] || 0, 10) + 1;
+  };
+
+  var decrementPending = function() {
+    var ds = r.dataset;
+    var val = parseInt(ds.pending || 0, 10) - 1;
+    if (val) ds.pending = val;
+    else delete ds.pending;
+  };
+
   tdf.on("pending", function() {
-    r.dataset.pending = parseInt(r.dataset.pending || 0, 10) + 1;
+    increment('pending');
   });
 
   tdf.on("pass", function() {
-    r.dataset.passed = parseInt(r.dataset.passed || 0, 10) + 1;
-    r.dataset.pending = parseInt(r.dataset.pending || 0, 10) - 1;
+    increment('passed');
+    decrementPending();
   });
 
   tdf.on("fail", function(name, fails) {
-    r.dataset.failed = parseInt(r.dataset.failed || 0, 10) + 1;
-    r.dataset.pending = parseInt(r.dataset.pending || 0, 10) - 1;
+    increment('failed');
+    decrementPending();
 
     var list = ce('ul');
     fails.forEach(function(ex) {
