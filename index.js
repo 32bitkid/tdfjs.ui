@@ -10,11 +10,17 @@
   var r = ce("div"), s = ce('style');
   r.dataset.passed = 0;
 
-  s.innerHTML = '#tdf-results.fail{'+
+  var id = "tdf-"+Math.random();
+  var passedContent = 'attr(data-passed) " Passed"';
+  var failedContent = 'attr(data-failed) " Failed"';
+  var pendingContent = 'attr(data-pending) " Pending"';
+
+  s.innerHTML =
+    '#'+id+'.fail{'+
       'background-color:#f66;'+
       'border-color:red'+
     '}' +
-    '#tdf-results{'+
+    '#'+id+'{'+
       'position:fixed;'+
       'bottom:0;'+
       'right:0;'+
@@ -24,29 +30,47 @@
       'border-bottom:0;'+
       'font-size:0.8rem;'+
       'font-family:monospace;'+
-      'max-width: 50vw;'+
+      'max-width:50vw;'+
       'max-height:20vh;'+
       'overflow:auto;'+
     '}' +
-    '#tdf-results::before{'+
-      'content: attr(data-passed) ' +
-        '" Passed";font-weight:bold;'+
-    '}' +
-    '#tdf-results[data-failed]::before{'+
+    '#'+id+'::before{'+
       'content:' +
-        'attr(data-failed) " Failed"' +
+        passedContent +
+        ';' +
+        'font-weight:bold;'+
+    '}' +
+    '#'+id+'[data-failed]::before{'+
+      'content:' +
+        failedContent +
         '" / "' +
-        'attr(data-passed) " Passed"'+
+        passedContent +
       ';'+
     '}'+
-    '#tdf-results h4{'+
+    '#'+id+'[data-pending]::before{'+
+      'content:' +
+        pendingContent +
+        '" / "' +
+        passedContent +
+      ';'+
+    '}'+
+    '#'+id+'[data-failed][data-pending]::before{'+
+      'content:' +
+        failedContent +
+        '" / "' +
+        pendingContent +
+        '" / "' +
+        passedContent +
+      ';'+
+    '}'+
+    '#'+id+' h4{'+
       'margin:0.5em 0;'+
       'border-bottom:1px solid #633;'+
     '}'+
-    '#tdf-results h4::before{'+
+    '#'+id+' h4::before{'+
       'content:"\\2717  ";'+
     '}'+
-    '#tdf-results ul{'+
+    '#'+id+' ul{'+
       'padding-left: 2em;'+
       'list-style:circle;'+
     '}';
@@ -54,14 +78,21 @@
   document.body.appendChild(r);
   document.body.appendChild(s);
 
-  r.setAttribute('id','tdf-results');
+  r.setAttribute('id',id);
+  r.setAttribute('class', 'tdf-results');
+
+  tdf.on("pending", function() {
+    r.dataset.pending = parseInt(r.dataset.pending || 0, 10) + 1;
+  });
 
   tdf.on("pass", function() {
     r.dataset.passed = parseInt(r.dataset.passed || 0, 10) + 1;
+    r.dataset.passed = parseInt(r.dataset.pending || 0, 10) - 1;
   });
 
   tdf.on("fail", function(name, fails) {
     r.dataset.failed = parseInt(r.dataset.failed || 0, 10) + 1;
+    r.dataset.pending = parseInt(r.dataset.pending || 0, 10) - 1;
 
     var list = ce('ul');
     fails.forEach(function(ex) {
