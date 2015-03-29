@@ -10,12 +10,12 @@
   var r = ce("div"), s = ce('style');
   r.dataset.passed = 0;
 
-  s.innerHTML = '.tdf.fail{'+
+  s.innerHTML = '#tdf-results.fail{'+
       'background-color:#f66;'+
       'border-color:red'+
     '}' +
-    '.tdf{'+
-      'position:absolute;'+
+    '#tdf-results{'+
+      'position:fixed;'+
       'bottom:0;'+
       'right:0;'+
       'padding:0.5em;'+
@@ -28,25 +28,25 @@
       'max-height:20vh;'+
       'overflow:auto;'+
     '}' +
-    '.tdf::before{'+
+    '#tdf-results::before{'+
       'content: attr(data-passed) ' +
         '" Passed";font-weight:bold;'+
     '}' +
-    '.tdf[data-failed]::before{'+
+    '#tdf-results[data-failed]::before{'+
       'content:' +
         'attr(data-failed) " Failed"' +
         '" / "' +
         'attr(data-passed) " Passed"'+
       ';'+
     '}'+
-    '.tdf h4{'+
+    '#tdf-results h4{'+
       'margin:0.5em 0;'+
       'border-bottom:1px solid #633;'+
     '}'+
-    '.tdf h4::before{'+
+    '#tdf-results h4::before{'+
       'content:"\\2717  ";'+
     '}'+
-    '.tdf ul{'+
+    '#tdf-results ul{'+
       'padding-left: 2em;'+
       'list-style:circle;'+
     '}';
@@ -54,7 +54,7 @@
   document.body.appendChild(r);
   document.body.appendChild(s);
 
-  r.setAttribute('class','tdf');
+  r.setAttribute('id','tdf-results');
 
   tdf.on("pass", function() {
     r.dataset.passed = parseInt(r.dataset.passed || 0, 10) + 1;
