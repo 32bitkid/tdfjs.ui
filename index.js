@@ -10,7 +10,7 @@
   var r = ce("div"), s = ce('style');
   r.dataset.passed = 0;
 
-  var id = "tdf-"+Math.random();
+  var id = "tdf-"+(Math.random()*1e6|0);
   var passedContent = 'attr(data-passed) " Passed"';
   var failedContent = 'attr(data-failed) " Failed"';
   var pendingContent = 'attr(data-pending) " Pending"';
