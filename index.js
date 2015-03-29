@@ -87,7 +87,7 @@
 
   tdf.on("pass", function() {
     r.dataset.passed = parseInt(r.dataset.passed || 0, 10) + 1;
-    r.dataset.passed = parseInt(r.dataset.pending || 0, 10) - 1;
+    r.dataset.pending = parseInt(r.dataset.pending || 0, 10) - 1;
   });
 
   tdf.on("fail", function(name, fails) {
